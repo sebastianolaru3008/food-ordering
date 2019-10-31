@@ -158,6 +158,13 @@ int main() {
     printf("Payment amount: %d\n", paymentAmount);
     printf("--------------------\n");
 
+    printf("a) Confirm order\n");
+    printf("b) Go back\n");
+
+    choice = getchar();
+    fflush(stdin);
+    if(choice = 'b') goto goBack;
+
     return 0;
 
     goBack:
