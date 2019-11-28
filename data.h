@@ -6,6 +6,7 @@
 #define MAX_SPECIFIC_FOOD_NAME 30
 #define MAX_DRINK_NAME 30
 #define MAX_BUFFER_SIZE 400
+#define MAX_ADDITIONAL_INFO_SIZE 100
 
 int findNoOfSpecificFood(char buffer[]);
 
@@ -14,8 +15,8 @@ void readFoodDataFromBuffer(char *buffer, int noOfParentheses, char *foodType, c
 
 void readDrinkDataFromBuffer(char *buffer, int noOfDrinks, char **drink, double *drinkPrice);
 
-void loadDataFromConsole(char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
-                         double **drinkPrices, int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks);
+void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
+                      double **drinkPrices, int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks);
 
 void freeDataFromMemory(char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
                         double **drinkPrices, int **noOfSpecificFood, int noOfFoodTypes, int noOfDrinks);

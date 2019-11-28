@@ -48,15 +48,12 @@ void readDrinkDataFromBuffer(char *buffer, int noOfDrinks, char **drink, double 
     }
 }
 
-void loadDataFromConsole(char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
+void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
                          double **drinkPrices,
                          int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks) {
 
-    printf("%s", LOAD_DATA);
-
     //allocation of food memory
-    scanf("%d:", noOfFoodTypes);
-    fflush(stdin);
+    fscanf(f,"%d:\n", noOfFoodTypes);
     *foodTypes = (char **) malloc(*noOfFoodTypes * sizeof(char *));
     *specificFood = (char ***) malloc(*noOfFoodTypes * sizeof(char **));
     *noOfSpecificFood = (int *) malloc(*noOfFoodTypes * sizeof(int));
@@ -64,7 +61,8 @@ void loadDataFromConsole(char ***foodTypes, char ****specificFood, char ***drink
     for (int i = 0; i < *noOfFoodTypes; ++i) {
 
         char buffer[MAX_BUFFER_SIZE];
-        gets(buffer);
+        fgets(buffer,MAX_BUFFER_SIZE,f);
+        buffer[strlen(buffer)-1] = '\0';
         (*noOfSpecificFood)[i] = findNoOfSpecificFood(buffer);
 
         (*foodTypes)[i] = (char *) malloc(MAX_FOODTYPE_NAME * sizeof(char));
@@ -79,15 +77,15 @@ void loadDataFromConsole(char ***foodTypes, char ****specificFood, char ***drink
     }
 
     //allocate drink memory
-    scanf("%d:", noOfDrinks);
-    fflush(stdin);
+    fscanf(f,"%d:\n", noOfDrinks);
     *drinks = (char **) malloc(*noOfDrinks * sizeof(char *));
     *drinkPrices = (double *) malloc(*noOfDrinks * sizeof(double));
     for (int i = 0; i < *noOfDrinks; ++i) {
         (*drinks)[i] = (char *) malloc(MAX_DRINK_NAME * sizeof(char));
     }
     char buffer[MAX_BUFFER_SIZE];
-    gets(buffer);
+    fgets(buffer,MAX_BUFFER_SIZE,f);
+    buffer[strlen(buffer)-1] = '\0';
 
     //read drink data
     readDrinkDataFromBuffer(buffer, *noOfDrinks, *drinks, *drinkPrices);
