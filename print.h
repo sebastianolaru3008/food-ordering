@@ -1,21 +1,19 @@
 #ifndef FOOD_ORDERING_PRINT_H
 #define FOOD_ORDERING_PRINT_H
 
-#define MAX_FOOD_RECIPE_NAME 30
-#define MAX_DRINK_NAME 30
 
-void printOrderHeader(char username[]);
+void printOrder(char username[], char drinkChoice, char cutleryChoice, char foodRecipes[],
+                double foodPrices, int noOfDrinks, char drinks[], double drinkPrices, char additionalInfo[],
+                int *orderFinished, int *state);
 
-void printOrderBody(char drinkChoice, char cutleryChoice, char foodRecipes[],
-                    int foodPrices, int noOfDrinks, char drinks[], int drinkPrices, char additionalInfo[]);
+void printFoodTypeOptions(int noOfFoodTypes, char *foodTypes[], int *foodChoice, int *state);
 
+void printRecipeOptions(int noOfRecipes, char foodTypes[], char *foodRecipes[], double prices[], int *recipeChoice,
+                        int *state);
 
-void printFoodTypeOptions(int foodRows, char foodTypes[][10]);
+void printDrinkOptions(int noOfDrinks, char foodTypes[], char *drinks[], double drinksPrices[], int *drinkChoice,
+                       int *state);
 
-void printRecipeOptions(int noOfRecipes, char foodTypes[], char foodRecipes[][MAX_FOOD_RECIPE_NAME], int prices[]);
-
-void printDrinkOptions(int noOfDrinks, char foodTypes[], char drinks[][MAX_DRINK_NAME], int drinksPrices[]);
-
-void printCutleryOptions();
+void printCutleryOptions(int *cutleryChoice, int noOfCutleryOptions, int *state);
 
 #endif //FOOD_ORDERING_PRINT_H

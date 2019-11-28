@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "inputFunctions.h"
 
 void signInForm(char *username, char *password) {
     printf("Welcome to Food Thingies!\n");
