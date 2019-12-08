@@ -15,7 +15,7 @@ void readFoodDataFromBuffer(char *buffer, int noOfParentheses, char *foodType, c
 
 void readDrinkDataFromBuffer(char *buffer, int noOfDrinks, char **drink, double *drinkPrice);
 
-void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
+void loadFoodDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
                       double **drinkPrices, int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks);
 
 void freeDataFromMemory(char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,

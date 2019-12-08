@@ -5,7 +5,7 @@
 #define MAX_SPECIFIC_FOOD_NAME 30
 
 
-void printOrder(char username[], char drinkChoice, char cutleryChoice, char foodRecipes[],
+void printOrder(char *username, char drinkChoice, char cutleryChoice, char foodRecipes[],
                 double foodPrices, int noOfDrinks, char drinks[], double drinkPrices, char additionalInfo[],
                 int *orderFinished, int *state) {
 

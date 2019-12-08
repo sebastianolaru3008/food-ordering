@@ -2,7 +2,7 @@
 #define FOOD_ORDERING_PRINT_H
 
 
-void printOrder(char username[], char drinkChoice, char cutleryChoice, char foodRecipes[],
+void printOrder(char *username, char drinkChoice, char cutleryChoice, char foodRecipes[],
                 double foodPrices, int noOfDrinks, char drinks[], double drinkPrices, char additionalInfo[],
                 int *orderFinished, int *state);
 

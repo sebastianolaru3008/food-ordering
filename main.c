@@ -2,12 +2,17 @@
 #include "print.h"
 #include "input.h"
 #include "data.h"
+#include "signIn.h"
+
+void chooseSignInOrUp(int *state);
 
 int main() {
     int state = 0;
     int orderFinished = 0;
     //user input
-    char username[MAX_USERNAME_LENGTH], password[MAX_PASSWORD_LENGTH], additionalInfo[MAX_ADDITIONAL_INFO_SIZE];
+    char **usernames, **passwords;
+    char additionalInfo[MAX_ADDITIONAL_INFO_SIZE];
+    int noOfUsers = 1, userIndex = 0;
     int foodChoice, recipeChoice, drinkChoice, cutleryChoice;
     //food memory
     char **foodTypes, ***specificFood, **drinks;
@@ -18,22 +23,22 @@ int main() {
 
     //Loading Data
     FILE *dataInput;
-    dataInput=fopen("data.txt","r");
-    if(dataInput==NULL){
+    dataInput = fopen("data.txt", "r");
+    if (dataInput == NULL) {
         printf("%s", LOAD_DATA);
-        loadDataFromFile(stdin,&foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
+        loadFoodDataFromFile(stdin, &foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
                          &noOfFoodTypes, &noOfDrinks);
-    }
-    else
-        loadDataFromFile(dataInput,&foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
+    } else
+        loadFoodDataFromFile(dataInput, &foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
                          &noOfFoodTypes, &noOfDrinks);
+
+    initializeUserData(&usernames,&passwords,MAX_USERNAME_LENGTH);
 
     //Switching States
     while (!orderFinished) {
         switch (state) {
             case 0: {
-                signInForm(username, password);
-                state++;
+                chooseSignInOrUp(&state);
                 break;
             }
             case 1: {
@@ -60,9 +65,19 @@ int main() {
                 break;
             }
             case 6: {
-                printOrder(username, drinkChoice, cutleryChoice, specificFood[foodChoice][recipeChoice],
+                printf("%d\n",userIndex);
+                printOrder(usernames[userIndex], drinkChoice, cutleryChoice, specificFood[foodChoice][recipeChoice],
                            foodPrices[foodChoice][recipeChoice], noOfDrinks, drinks[drinkChoice],
                            drinkPrices[drinkChoice], additionalInfo, &orderFinished, &state);
+                break;
+            }
+            case 7: {
+                signInProcess(usernames, passwords, noOfUsers, &userIndex, &state);
+                break;
+            }
+            case 8: {
+                signUpProcess(&usernames, &passwords, &noOfUsers, &userIndex, &state);
+                printf("%d\n",userIndex);
                 break;
             }
         }
@@ -72,3 +87,4 @@ int main() {
                        noOfFoodTypes, noOfDrinks);
     return 0;
 }
+

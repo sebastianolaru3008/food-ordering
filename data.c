@@ -4,22 +4,31 @@
 #include "data.h"
 
 int findNoOfSpecificFood(char buffer[]) {
-    int counter = 0;
-    for (int i = 0; i < strlen(buffer); ++i) {
-        counter = (buffer[i] != '(') ? counter : (counter + 1);
-    }
-    return counter;
+    int noOfSpecificFood=0;
+    char subbuffer1[MAX_BUFFER_SIZE], subbuffer2[MAX_BUFFER_SIZE];
+    char *token = strchr(buffer, ':');
+    strncpy(subbuffer1, buffer, token - buffer);
+    subbuffer1[token - buffer] = '\0';
+    token = strrchr(subbuffer1, ' ');
+    strncpy(subbuffer2, token, subbuffer1 - token + strlen(subbuffer1));
+    subbuffer2[subbuffer1 - token + strlen(subbuffer1)] = '\0';
+    sscanf(subbuffer2, "%d", &noOfSpecificFood);
+
+    return noOfSpecificFood;
 }
 
 void readFoodDataFromBuffer(char *buffer, int noOfParentheses, char *foodType, char **specificFood,
                             double *foodPrices) {
+    char subbuffer[MAX_BUFFER_SIZE];
     char *token = strchr(buffer, ':');
+    strncpy(subbuffer, buffer, token - buffer);
+    subbuffer[token-buffer] = '\0';
+    token = strrchr(subbuffer, ' ');
     //get foodType
-    strncpy(foodType, buffer, token - buffer);
-    foodType[token - buffer] = '\0';
+    strncpy(foodType, subbuffer, token - subbuffer);
+    foodType[token - subbuffer] = '\0';
 
-    token += 2;
-    token = strchr(token, '(');
+    token = strchr(buffer, '(');
     token++;
 
     for (int i = 0; i < noOfParentheses; ++i) {
@@ -48,12 +57,12 @@ void readDrinkDataFromBuffer(char *buffer, int noOfDrinks, char **drink, double 
     }
 }
 
-void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
-                         double **drinkPrices,
-                         int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks) {
+void loadFoodDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
+                      double **drinkPrices,
+                      int **noOfSpecificFood, int *noOfFoodTypes, int *noOfDrinks) {
 
     //allocation of food memory
-    fscanf(f,"%d:\n", noOfFoodTypes);
+    fscanf(f, "%d:\n", noOfFoodTypes);
     *foodTypes = (char **) malloc(*noOfFoodTypes * sizeof(char *));
     *specificFood = (char ***) malloc(*noOfFoodTypes * sizeof(char **));
     *noOfSpecificFood = (int *) malloc(*noOfFoodTypes * sizeof(int));
@@ -61,8 +70,8 @@ void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char **
     for (int i = 0; i < *noOfFoodTypes; ++i) {
 
         char buffer[MAX_BUFFER_SIZE];
-        fgets(buffer,MAX_BUFFER_SIZE,f);
-        buffer[strlen(buffer)-1] = '\0';
+        fgets(buffer, MAX_BUFFER_SIZE, f);
+        buffer[strlen(buffer) - 1] = '\0';
         (*noOfSpecificFood)[i] = findNoOfSpecificFood(buffer);
 
         (*foodTypes)[i] = (char *) malloc(MAX_FOODTYPE_NAME * sizeof(char));
@@ -77,15 +86,15 @@ void loadDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, char **
     }
 
     //allocate drink memory
-    fscanf(f,"%d:\n", noOfDrinks);
+    fscanf(f, "%d:\n", noOfDrinks);
     *drinks = (char **) malloc(*noOfDrinks * sizeof(char *));
     *drinkPrices = (double *) malloc(*noOfDrinks * sizeof(double));
     for (int i = 0; i < *noOfDrinks; ++i) {
         (*drinks)[i] = (char *) malloc(MAX_DRINK_NAME * sizeof(char));
     }
     char buffer[MAX_BUFFER_SIZE];
-    fgets(buffer,MAX_BUFFER_SIZE,f);
-    buffer[strlen(buffer)-1] = '\0';
+    fgets(buffer, MAX_BUFFER_SIZE, f);
+    buffer[strlen(buffer) - 1] = '\0';
 
     //read drink data
     readDrinkDataFromBuffer(buffer, *noOfDrinks, *drinks, *drinkPrices);
