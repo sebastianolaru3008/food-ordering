@@ -34,7 +34,7 @@ int main() {
 
     FILE *userData = fopen("users.txt", "r");
     loadUsernameDataFromFile(&usernames, &passwords, &key, &noOfUsers, userData);
-
+    fclose(userData);
 
     //Switching States
     while (!orderFinished) {

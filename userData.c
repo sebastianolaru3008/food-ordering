@@ -18,7 +18,6 @@ void loadUsernameDataFromFile(char ***usernames, char ***passwords, char **key, 
         converterVigenereChipher((*usernames)[i], *key, 'd');
         converterVigenereChipher((*passwords)[i], *key, 'd');
     }
-
 }
 
 void converterVigenereChipher(char givenString[], char key[], char encDecr) {

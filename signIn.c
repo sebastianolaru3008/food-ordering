@@ -68,15 +68,20 @@ void signUpProcess(char ***usernames, char ***passwords, char *key, int *noOfUse
             strcpy((*usernames)[*noOfUsers], providedUsername);
             converterVigenereChipher(providedUsername, key, 'e');
             fprintf(f, "(%s,", providedUsername);
+
             strcpy((*passwords)[*noOfUsers], providedPassword);
             converterVigenereChipher(providedPassword, key, 'e');
             fprintf(f, " %s)\n", providedPassword);
+
             fclose(f);
             FILE *f = fopen("users.txt", "r+");
+
             *userIndex = *noOfUsers;
             (*noOfUsers)++;
+
             fseek(f, 0, SEEK_SET);
-            fprintf(f, "%s\n%s\n", key, noOfUsersToString(*noOfUsers));
+            fprintf(f, "%s\n%d\n", key, *noOfUsers);
+            fclose(f);
             break;
         }
     }
@@ -100,22 +105,4 @@ int passwordValidation(char password[], char username[]) {
             return 1;
     printf("%s\n", ERROR_PASSWORD_DIGITS);
     return 0;
-}
-
-char *noOfUsersToString(int noOfUsers) {
-    char *p = (char*) malloc(MAX_NUMBER_OF_USERS_MAGNITUDE * sizeof(char));
-    int length = 0, aux = noOfUsers;
-    while(aux){
-        aux/=10;
-        ++length;
-    }
-    for(int i = length-1; i>=0;--i){
-        p[i] = '0'+ noOfUsers%10;
-        noOfUsers/=10;
-    }
-    for (int j = length; j < MAX_NUMBER_OF_USERS_MAGNITUDE; ++j) {
-        p[j] = ' '; // padding for the next decimal powers
-    }
-    p[MAX_NUMBER_OF_USERS_MAGNITUDE]= '\0';
-    return p;
 }
