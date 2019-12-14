@@ -16,18 +16,15 @@
 #define DUPLICATE_USER              "Please choose another username!"
 #define INCORRECT_PASSWORD          "Incorrect password"
 
-#define MAX_USERNAME_LENGTH 20
-#define MAX_PASSWORD_LENGTH 20
-#define MAX_NUMBER_OF_USERS 255
 
 void chooseSignInOrUp(int *state);
 
 void signInProcess(char **usernames, char **passwords, int noOfUsers, int *userIndex, int *state);
 
-void signUpProcess(char ***usernames, char ***passwords, int *noOfUsers, int *userIndex, int *state);
+void signUpProcess(char ***usernames, char ***passwords, char *key,  int *noOfUsers, int *userIndex, int *state);
 
 int passwordValidation(char pass[], char username[]);
 
-void initializeUserData(char ***usernames, char ***passwords, int noOfUsers);
+char *noOfUsersToString(int noOfUsers);
 
 #endif //FOOD_ORDERING_SIGNIN_H

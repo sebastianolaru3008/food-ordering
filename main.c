@@ -1,38 +1,40 @@
 #include <stdio.h>
 #include "print.h"
 #include "input.h"
-#include "data.h"
+#include "foodData.h"
 #include "signIn.h"
-
-void chooseSignInOrUp(int *state);
+#include "userData.h"
 
 int main() {
     int state = 0;
     int orderFinished = 0;
     //user input
-    char **usernames, **passwords;
-    char additionalInfo[MAX_ADDITIONAL_INFO_SIZE];
+    char **usernames, **passwords, *key;
     int noOfUsers = 1, userIndex = 0;
     int foodChoice, recipeChoice, drinkChoice, cutleryChoice;
     //food memory
     char **foodTypes, ***specificFood, **drinks;
+    char additionalInfo[MAX_ADDITIONAL_INFO_SIZE];
     double **foodPrices, *drinkPrices;
     int *noOfSpecificFood;
     int noOfFoodTypes;
     int noOfDrinks;
 
     //Loading Data
-    FILE *dataInput;
-    dataInput = fopen("data.txt", "r");
+    FILE *dataInput = fopen("data.txt", "r");
     if (dataInput == NULL) {
         printf("%s", LOAD_DATA);
         loadFoodDataFromFile(stdin, &foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
-                         &noOfFoodTypes, &noOfDrinks);
+                             &noOfFoodTypes, &noOfDrinks);
     } else
-        loadFoodDataFromFile(dataInput, &foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices, &noOfSpecificFood,
-                         &noOfFoodTypes, &noOfDrinks);
+        loadFoodDataFromFile(dataInput, &foodTypes, &specificFood, &drinks, &foodPrices, &drinkPrices,
+                             &noOfSpecificFood,
+                             &noOfFoodTypes, &noOfDrinks);
+    fclose(dataInput);
 
-    initializeUserData(&usernames,&passwords,MAX_USERNAME_LENGTH);
+    FILE *userData = fopen("users.txt", "r");
+    loadUsernameDataFromFile(&usernames, &passwords, &key, &noOfUsers, userData);
+
 
     //Switching States
     while (!orderFinished) {
@@ -65,7 +67,6 @@ int main() {
                 break;
             }
             case 6: {
-                printf("%d\n",userIndex);
                 printOrder(usernames[userIndex], drinkChoice, cutleryChoice, specificFood[foodChoice][recipeChoice],
                            foodPrices[foodChoice][recipeChoice], noOfDrinks, drinks[drinkChoice],
                            drinkPrices[drinkChoice], additionalInfo, &orderFinished, &state);
@@ -76,8 +77,7 @@ int main() {
                 break;
             }
             case 8: {
-                signUpProcess(&usernames, &passwords, &noOfUsers, &userIndex, &state);
-                printf("%d\n",userIndex);
+                signUpProcess(&usernames, &passwords, key, &noOfUsers, &userIndex, &state);
                 break;
             }
         }

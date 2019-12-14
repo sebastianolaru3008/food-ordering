@@ -1,5 +1,5 @@
-#ifndef FOOD_ORDERING_DATA_H
-#define FOOD_ORDERING_DATA_H
+#ifndef FOOD_ORDERING_FOODDATA_H
+#define FOOD_ORDERING_FOODDATA_H
 
 #define LOAD_DATA "Please load the data \n"
 #define MAX_FOODTYPE_NAME 30
@@ -21,4 +21,4 @@ void loadFoodDataFromFile(FILE *f, char ***foodTypes, char ****specificFood, cha
 void freeDataFromMemory(char ***foodTypes, char ****specificFood, char ***drinks, double ***foodPrices,
                         double **drinkPrices, int **noOfSpecificFood, int noOfFoodTypes, int noOfDrinks);
 
-#endif //FOOD_ORDERING_DATA_H
+#endif //FOOD_ORDERING_FOODDATA_H

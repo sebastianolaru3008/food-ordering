@@ -3,8 +3,6 @@
 
 #define CUTLERRY_OPTIONS 2
 
-void signInForm(char *username, char *password);
-
 int choiceAnalyser(int noOfChoices, int *state);
 
 int getFinalOrderChoice(int *state, char username[]);

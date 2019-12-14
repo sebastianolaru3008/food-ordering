@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "signIn.h"
+#include "userData.h"
 
 void chooseSignInOrUp(int *state) {
 
@@ -43,10 +44,11 @@ void signInProcess(char **usernames, char **passwords, int noOfUsers, int *userI
     *state = 0;
 }
 
-void signUpProcess(char ***usernames, char ***passwords, int *noOfUsers, int *userIndex, int *state) {
+void signUpProcess(char ***usernames, char ***passwords, char *key, int *noOfUsers, int *userIndex, int *state) {
 
     char providedUsername[MAX_USERNAME_LENGTH];
     char providedPassword[MAX_PASSWORD_LENGTH];
+    FILE *f = fopen("users.txt", "a+");
 
     printf("%s\n", SIGNING_UP);
     printf("---Username\n");
@@ -63,10 +65,18 @@ void signUpProcess(char ***usernames, char ***passwords, int *noOfUsers, int *us
                 gets(providedPassword);
             }
             *state = 1;
-            strcpy((*usernames)[*noOfUsers],providedUsername);
-            strcpy((*passwords)[*noOfUsers],providedPassword);
+            strcpy((*usernames)[*noOfUsers], providedUsername);
+            converterVigenereChipher(providedUsername, key, 'e');
+            fprintf(f, "(%s,", providedUsername);
+            strcpy((*passwords)[*noOfUsers], providedPassword);
+            converterVigenereChipher(providedPassword, key, 'e');
+            fprintf(f, " %s)\n", providedPassword);
+            fclose(f);
+            FILE *f = fopen("users.txt", "r+");
             *userIndex = *noOfUsers;
             (*noOfUsers)++;
+            fseek(f, 0, SEEK_SET);
+            fprintf(f, "%s\n%s\n", key, noOfUsersToString(*noOfUsers));
             break;
         }
     }
@@ -92,15 +102,20 @@ int passwordValidation(char password[], char username[]) {
     return 0;
 }
 
-void initializeUserData(char ***usernames, char ***passwords, int noOfUsers) {
-
-    *usernames = (char **) malloc(noOfUsers * sizeof(char *));
-    *passwords = (char **) malloc(noOfUsers * sizeof(char *));
-    for (int i = 0; i < noOfUsers; ++i) {
-        (*usernames)[i] = (char *) malloc(MAX_USERNAME_LENGTH * sizeof(char));
-        (*passwords)[i] = (char *) malloc(MAX_PASSWORD_LENGTH * sizeof(char));
+char *noOfUsersToString(int noOfUsers) {
+    char *p = (char*) malloc(MAX_NUMBER_OF_USERS_MAGNITUDE * sizeof(char));
+    int length = 0, aux = noOfUsers;
+    while(aux){
+        aux/=10;
+        ++length;
     }
-
-    (*usernames)[0] = "admin";
-    (*passwords)[0] = "admin";
+    for(int i = length-1; i>=0;--i){
+        p[i] = '0'+ noOfUsers%10;
+        noOfUsers/=10;
+    }
+    for (int j = length; j < MAX_NUMBER_OF_USERS_MAGNITUDE; ++j) {
+        p[j] = ' '; // padding for the next decimal powers
+    }
+    p[MAX_NUMBER_OF_USERS_MAGNITUDE]= '\0';
+    return p;
 }
