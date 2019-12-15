@@ -1,91 +1,71 @@
 #include <stdio.h>
 #include <string.h>
-#include "print.h"
+#include "input.h"
 
-void printOrderHeader(char username[])
-{
+#define MAX_SPECIFIC_FOOD_NAME 30
+
+
+void printOrder(char *username, char drinkChoice, char cutleryChoice, char foodRecipes[],
+                double foodPrices, int noOfDrinks, char drinks[], double drinkPrices, char additionalInfo[],
+                int *orderFinished, int *state) {
+
     printf("This is your order:\n");
     printf("-------------------\n");
     printf("Name: %s\n", username);
-}
-
-void printOrderFood(char foodChoice, char recipeChoice, char drinkChoice, char foodRecipes[][4][30],
-                    int foodPrices[][4], char drinks[][20], int drinkPrices[],int userWantsDrink)
-{
     printf("Food items:\n");
-    printf("---%s: %d\n", foodRecipes[foodChoice][recipeChoice], foodPrices[foodChoice][recipeChoice]);
-    if (userWantsDrink)
-        printf("---%s: %d\n", drinks[drinkChoice], drinkPrices[drinkChoice]);
-}
-
-void printOrderInfo(char cutleryChoice, int userHasAdditionalInfo, char additionalInfo[], int foodPrices[][4], char foodChoice, char recipeChoice, int drinkPrices[], char drinkChoice)
-{
+    printf("---%s: %.2lf\n", foodRecipes, foodPrices);
+    if (drinkChoice != noOfDrinks)
+        printf("---%s: %.2lf\n", drinks, drinkPrices);
     printf("Cutlery: %s\n", (cutleryChoice == 0) ? "yes" : "no");
-    if (userHasAdditionalInfo)
+    if (strcmp(additionalInfo, "") != 0)
         printf("Aditional info: %s\n", additionalInfo);
-    int
-            paymentAmount = foodPrices[foodChoice][recipeChoice] + drinkPrices[drinkChoice];
-    printf("Payment amount: %d\n", paymentAmount);
-}
-void printOrderFooter()
-{
+    printf("Payment amount: %.2lf\n", foodPrices + drinkPrices);
     printf("--------------------\n");
-    printf("a) Confirm order\n");
-    printf("b) Go back\n");
+
+    *orderFinished = getFinalOrderChoice(state, username);
 }
 
-void printFoodOptions(int foodRows, char foodTypes[][10], int *lastIndex)
-{
+void printFoodTypeOptions(int noOfFoodTypes, char *foodTypes[], int *foodChoice, int *state) {
     printf("Please choose the food you feel like eating today:\n");
-    for (int i = 0; i < foodRows; i++) {
+    for (int i = 0; i < noOfFoodTypes; i++) {
         putchar('a' + i);
         printf(") %s\n", foodTypes[i]);
-        (*lastIndex)++;
     }
-    putchar('a' + (*lastIndex));
+    putchar('a' + noOfFoodTypes);
     printf(") Go back\n");
+    *foodChoice = choiceAnalyser(noOfFoodTypes, state);
 }
 
-void printRecipeOptions(char foodTypes[][10], char foodRows, int foodCols, char foodChoice, char foodRecipes[][4][30], int *lastIndex)
-{
-    printf("Please choose the type of %s:\n", foodTypes[foodChoice]);
-    for (int j = 0; j < foodRows; ++j) {
-        if (j == foodChoice) {
-            for (int i = 0; i < foodCols; i++) {
-                if (strcmp(foodRecipes[j][i], "") != 0) {
-                    putchar('a' + i);
-                    printf(") %s\n", foodRecipes[j][i]);
-                    (*lastIndex)++;
-                } else break;
-            }
-
-            putchar('a' + (*lastIndex));
-            printf(") Go back\n");
-        }
-    }
-}
-
-void printDrinkOptions(char foodTypes[][10], char foodChoice, char drinksCount, char drinks[][20], int *lastIndex)
-{
-    printf("Please choose a drink to go with your %s:\n", foodTypes[foodChoice]);
-    for (int i = 0; i < drinksCount; i++)
-    {
+void printRecipeOptions(int noOfRecipes, char foodTypes[], char *foodRecipes[], double prices[], int *recipeChoice,
+                        int *state) {
+    printf("Please choose the type of %s \n", foodTypes);
+    for (int i = 0; i < noOfRecipes; i++) {
         putchar('a' + i);
-        printf(") %s\n", drinks[i]);
-        (*lastIndex)++;
+        printf(") %s: %.2lf \n", foodRecipes[i], prices[i]);
     }
+    printf("%c) Go Back \n", 'a' + noOfRecipes);
 
-    putchar('a' + (*lastIndex)++);
-    printf(") No, thanks!\n");
-
-    putchar('a' + (*lastIndex));
-    printf(") Go back!\n");
+    *recipeChoice = choiceAnalyser(noOfRecipes, state);
 }
 
-void printCutleryOptions()
-{
+void printDrinkOptions(int noOfDrinks, char foodTypes[], char *drinks[], double drinksPrices[], int *drinkChoice,
+                       int *state) {
+    printf("Please choose a drink to go with your %s \n", foodTypes);
+    for (int i = 0; i < noOfDrinks; i++) {
+        putchar('a' + i);
+        printf(") %s: %.2lf \n", drinks[i], drinksPrices[i]);
+    }
+    printf("%c) No thanks! \n", 'a' + noOfDrinks - 1);
+    printf("%c) Go Back \n", 'a' + noOfDrinks);
+
+    *drinkChoice = choiceAnalyser(noOfDrinks, state);
+}
+
+void printCutleryOptions(int *cutleryChoice, int noOfCutleryOptions, int *state) {
     printf("Do you want cutlery?\n");
     printf("a) Yes\n");
     printf("b) No,thanks!\n");
     printf("c) Go back!\n");
+
+    *cutleryChoice = choiceAnalyser(noOfCutleryOptions, state);
 }
