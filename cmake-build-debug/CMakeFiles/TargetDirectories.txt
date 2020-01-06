@@ -1,0 +1,3 @@
+C:/Users/acer/Desktop/CP Lab/food-ordering/cmake-build-debug/CMakeFiles/food_ordering.dir
+C:/Users/acer/Desktop/CP Lab/food-ordering/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/acer/Desktop/CP Lab/food-ordering/cmake-build-debug/CMakeFiles/rebuild_cache.dir
