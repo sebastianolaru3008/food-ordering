@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/acer/Desktop/CP Lab/food-ordering/signIn.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+signIn.h
+C:/Users/acer/Desktop/CP Lab/food-ordering/signIn.h
+userData.h
+C:/Users/acer/Desktop/CP Lab/food-ordering/userData.h
+
+C:/Users/acer/Desktop/CP Lab/food-ordering/signIn.h
+
+C:/Users/acer/Desktop/CP Lab/food-ordering/userData.h
+
